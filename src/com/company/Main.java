@@ -7,12 +7,13 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) {
-        BasketballPlayerProfile player1 = new BasketballPlayerProfile("Larry Bird", 6.9, 220, 24.3);
+        Rebounds playerBird = new Rebounds(6.9, 3.1);
+        BasketballPlayerProfile player1 = new BasketballPlayerProfile("Larry Bird", 6.9, 220, 24.3, playerBird);
         File file = new File("player.txt");
         try {
             Serializer.saveSerialized(player1, String.valueOf(file));
         } catch (IllegalAccessException | FileNotFoundException e) {
-            e.printStackTrace();
+
         }
 
         try {

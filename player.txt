@@ -1,1 +1,1 @@
-name=Larry Bird;height=6.9;averagePointsPerGame=24.3;
+name=Larry Bird;height=6.9;averagePointsPerGame=24.3;averageRebounds=defensiveRebounds<6.9>offensiveRebounds<3.1>;

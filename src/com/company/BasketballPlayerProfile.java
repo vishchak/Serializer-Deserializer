@@ -9,47 +9,22 @@ public class BasketballPlayerProfile {
     private Integer weight;
     @Test
     private double averagePointsPerGame;
-
-    public BasketballPlayerProfile(String name, double height, Integer weight, double averagePointsPerGame) {
-        this.name = name;
-        this.height = height;
-        this.weight = weight;
-        this.averagePointsPerGame = averagePointsPerGame;
-    }
+    @Test
+    private Rebounds averageRebounds;
 
     public BasketballPlayerProfile() {
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public BasketballPlayerProfile(String name, double height, Integer weight, double averagePointsPerGame, Rebounds averageRebounds) {
         this.name = name;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public void setHeight(double height) {
         this.height = height;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
         this.weight = weight;
-    }
-
-    public double getAveragePointsPerGame() {
-        return averagePointsPerGame;
-    }
-
-    public void setAveragePointsPerGame(Integer averagePointsPerGame) {
         this.averagePointsPerGame = averagePointsPerGame;
+        this.averageRebounds = averageRebounds;
+    }
+
+    public void setAverageRebounds(Rebounds averageRebounds) {
+        this.averageRebounds = averageRebounds;
     }
 
     @Override
@@ -59,6 +34,7 @@ public class BasketballPlayerProfile {
                 ", height=" + height +
                 ", weight=" + weight +
                 ", averagePointsPerGame=" + averagePointsPerGame +
+                ", averageRebounds=" + averageRebounds +
                 '}';
     }
 }
