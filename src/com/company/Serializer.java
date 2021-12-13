@@ -16,7 +16,7 @@ public class Serializer {
                 fields) {
             if (fld.isAnnotationPresent(Test.class)) {
                 fld.setAccessible(true);
-                    text += fld.getName() + "=";
+                text += fld.getName() + "=";
                 if (fld.getType() == Integer.class) {
                     text += fld.getInt(obj) + ";";
                 } else if (fld.getType() == String.class) {

@@ -18,7 +18,7 @@ public class Main {
 
         try {
             Deserializer.deserialize(file, BasketballPlayerProfile.class);
-        } catch (IOException | IllegalAccessException | InstantiationException exception) {
+        } catch (IOException | IllegalAccessException | InstantiationException | NoSuchFieldException exception) {
             exception.printStackTrace();
         }
     }

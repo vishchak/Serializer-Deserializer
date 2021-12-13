@@ -6,7 +6,7 @@ import java.lang.reflect.Modifier;
 
 
 public class Deserializer {
-    public static String[] spitFromFile(File file, String regex) throws IOException {
+    private static String[] spitFromFile(File file, String regex) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(file));
         String line;
         while ((line = br.readLine()) != null) {
@@ -16,8 +16,23 @@ public class Deserializer {
         return null;
     }
 
+    private static void ifSet(Field field, Object obj, String str) throws IllegalAccessException {
+        if (field.getType() == Integer.class) {
+            field.setInt(obj, Integer.parseInt(str));
+        } else if (field.getType() == double.class) {
+            field.setDouble(obj, Double.parseDouble(str));
+        } else if (field.getType() == String.class) {
+            field.set(obj, str);
+        } else if (field.getType() == long.class) {
+            field.setLong(obj, Long.parseLong(str));
+        } else if (field.getType() == char.class) {
+            field.set(obj, str.toCharArray());
+        } else if (field.getType() == boolean.class) {
+            field.setBoolean(obj, Boolean.parseBoolean(str));
+        }
+    }
 
-    public static <T> T deserialize(File file, Class<T> cls) throws IOException, IllegalAccessException, InstantiationError, InstantiationException {
+    public static <T> T deserialize(File file, Class<T> cls) throws IOException, IllegalAccessException, InstantiationError, InstantiationException, NoSuchFieldException {
         if (!file.exists()) {
             throw new FileNotFoundException();
         }
@@ -30,19 +45,13 @@ public class Deserializer {
             if (result.length == 2) {
                 String name = result[0];
                 String value = result[1];
-                try {
                     Field field = cls.getDeclaredField(name);
                     if (Modifier.isPrivate(field.getModifiers())) {
                         field.setAccessible(true);
                     }
                     if (field.isAnnotationPresent(Test.class)) {
-                        if (field.getType() == Integer.class) {
-                            field.setInt(obj, Integer.parseInt(value));
-                        } else if (field.getType() == double.class) {
-                            field.setDouble(obj, Double.parseDouble(value));
-                        } else if (field.getType() == String.class) {
-                            field.set(obj, value);
-                        } else if (field.getType() == Rebounds.class) {
+                        Deserializer.ifSet(field, obj, value);
+                        if (field.getType() == Rebounds.class) {
                             Class<?> innerClass = field.getType();
                             Object rb = innerClass.newInstance();
                             String[] innerValues = value.split(">");
@@ -55,21 +64,16 @@ public class Deserializer {
                                 if (Modifier.isPrivate(innerField.getModifiers())) {
                                     innerField.setAccessible(true);
                                     if (innerField.isAnnotationPresent(Test.class)) {
-                                        if (innerField.getType() == double.class) {
-                                            innerField.setDouble(rb, Double.parseDouble(finalValue));
-                                        }
-                                        field.set(obj, rb);
+                                        Deserializer.ifSet(innerField, rb, finalValue);
                                     }
+                                    field.set(obj, rb);
                                 }
                             }
                         }
                     }
-                } catch (NoSuchFieldException e) {
-                    System.out.println("No data");
+
                 }
             }
-        }
-        System.out.println(obj);
         return obj;
     }
 }
