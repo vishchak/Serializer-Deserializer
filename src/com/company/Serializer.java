@@ -7,6 +7,22 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
 public class Serializer {
+    private static String ifGet(Field field, Object obj, String str) throws IllegalAccessException {
+        if (field.getType() == Integer.class) {
+            str += field.getInt(obj) + ";";
+        } else if (field.getType() == String.class) {
+            str += field.get(obj) + ";";
+        } else if (field.getType() == double.class) {
+            str += field.getDouble(obj) + ";";
+        } else if (field.getType() == Long.class) {
+            str += field.getLong(obj) + ";";
+        } else if (field.getType() == boolean.class) {
+            str += field.getBoolean(obj) + ";";
+        } else if (field.getType() == char.class) {
+            str += field.getChar(obj) + ";";
+        }
+        return str;
+    }
 
     private static String serialize(Object obj) throws IllegalAccessException {
         String text = "";
@@ -17,13 +33,8 @@ public class Serializer {
             if (fld.isAnnotationPresent(Test.class)) {
                 fld.setAccessible(true);
                 text += fld.getName() + "=";
-                if (fld.getType() == Integer.class) {
-                    text += fld.getInt(obj) + ";";
-                } else if (fld.getType() == String.class) {
-                    text += fld.get(obj) + ";";
-                } else if (fld.getType() == double.class) {
-                    text += fld.getDouble(obj) + ";";
-                } else if (fld.getType() == Rebounds.class) {
+                text += Serializer.ifGet(fld, obj, text);
+                if (fld.getType() == Rebounds.class) {
                     Object object = fld.get(obj);
                     Class<?> innerObject = fld.getType();
                     Field[] innerFields = innerObject.getDeclaredFields();
